@@ -1,13 +1,13 @@
 const cams = [
-  { id: "monumento-muni", nombre: "Monumento San Martín" },
-  { id: "monumento-calle", nombre: "Monumento Calle" },
-  { id: "isla132", nombre: "Isla 132" },
-  { id: "canal7", nombre: "Canal 7" },
-  { id: "mirador-rioneuquen", nombre: "Mirador Río Neuquén" },
-  { id: "puente-riolimay", nombre: "Puente Río Limay" },
-  { id: "rotonda-riolimay", nombre: "Rotonda Río Limay" },
-  { id: "sandracanale", nombre: "Parque Sandra Canale" },
-  { id: "parquecentral", nombre: "Parque Central" }
+  { nombre: "Monumento San Martín", url: "camaras/camara1.html", id: "monumento-muni" },
+  { nombre: "Monumento Calle", url: "camaras/camara2.html", id: "monumento-calle" },
+  { nombre: "Isla 132", url: "camaras/camara3.html", id: "isla132" },
+  { nombre: "Canal 7", url: "camaras/camara4.html", id: "canal7" },
+  { nombre: "Mirador Río Neuquén", url: "camaras/camara5.html", id: "mirador-rioneuquen" },
+  { nombre: "Puente Río Limay", url: "camaras/camara6.html", id: "puente-riolimay" },
+  { nombre: "Rotonda Río Limay", url: "camaras/camara7.html", id: "rotonda-riolimay" },
+  { nombre: "Parque Sandra Canale", url: "camaras/camara8.html", id: "sandracanale" },
+  { nombre: "Parque Central", url: "camaras/camara9.html", id: "parquecentral" }
 ];
 
 const container = document.getElementById("camGrid");
@@ -19,8 +19,10 @@ cams.forEach((cam, i) => {
   div.innerHTML = `
     <video id="video_${i}" autoplay muted playsinline></video>
     <img id="fallback_${i}" src="PICOLAS CAM.png" style="display:none;">
-    <div class="status">🟢 En vivo</div>
-    <a href="view/view.html?id=${cam.id}" class="cam-link">${cam.nombre}</a>
+    <div class="cam-info">
+      <a href="${cam.url}" class="cam-link">${cam.nombre}</a>
+      <span class="status">🟢 En vivo</span>
+    </div>
   `;
   container.appendChild(div);
 
@@ -31,7 +33,6 @@ cams.forEach((cam, i) => {
     const hls = new Hls();
     hls.loadSource(`https://camaras.neuquencapital.gov.ar/live/${cam.id}.m3u8`);
     hls.attachMedia(video);
-
     hls.on(Hls.Events.ERROR, (_, data) => {
       if (data.fatal) {
         video.style.display = "none";
@@ -42,6 +43,3 @@ cams.forEach((cam, i) => {
     video.src = `https://camaras.neuquencapital.gov.ar/live/${cam.id}.m3u8`;
   }
 });
-
-// recarga automática cada 5 min
-setTimeout(() => location.reload(), 300000);
